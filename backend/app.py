@@ -22,3 +22,7 @@ def get_characters():
 @app.get("/films")
 def get_films():
     return load_data("films")
+
+@app.get("/coordinates")
+def get_coordinates():
+    return load_data("coordinates")
