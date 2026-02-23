@@ -46,3 +46,9 @@ def graph_path(source: str, target: str):
 @app.get("/graph/top-characters")
 def graph_top():
     return {"top": top_characters()}
+
+from semantic_engine import semantic_search
+
+@app.get("/search")
+def search(query: str):
+    return {"results": semantic_search(query)}
