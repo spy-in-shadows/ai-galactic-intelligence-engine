@@ -36,3 +36,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from graph_engine import find_shortest_path, top_characters
+
+@app.get("/graph/path")
+def graph_path(source: str, target: str):
+    return {"path": find_shortest_path(source, target)}
+
+@app.get("/graph/top-characters")
+def graph_top():
+    return {"top": top_characters()}
