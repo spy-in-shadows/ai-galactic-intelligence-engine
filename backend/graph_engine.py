@@ -48,5 +48,13 @@ def find_shortest_path(source, target):
 
 def top_characters(n=5):
     centrality = nx.degree_centrality(G)
-    sorted_nodes = sorted(centrality.items(), key=lambda x: x[1], reverse=True)
+
+    character_nodes = [
+        (node, score)
+        for node, score in centrality.items()
+        if G.nodes[node]["type"] == "character"
+    ]
+
+    sorted_nodes = sorted(character_nodes, key=lambda x: x[1], reverse=True)
+
     return sorted_nodes[:n]
