@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { gsap } from "gsap"
 
+const planetMap = {}
 const planets = []
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
@@ -84,6 +85,7 @@ async function loadPlanets() {
 
     scene.add(sphere)
     planets.push(sphere)
+    planetMap[planet.name] = sphere
   })
 }
 
@@ -134,3 +136,49 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
+
+document.getElementById("searchBtn").addEventListener("click", async () => {
+
+  const query = document.getElementById("searchInput").value
+
+  const response = await fetch(`http://127.0.0.1:8000/search?query=${query}`)
+  const data = await response.json()
+
+  highlightResults(data.results)
+})
+
+
+function highlightResults(results) {
+
+  // Dim all planets
+  planets.forEach(p => {
+    p.material.opacity = 0.2
+    p.material.transparent = true
+  })
+
+  if (results.length === 0) return
+
+  const topPlanetName = results[0]
+  const topPlanet = planetMap[topPlanetName]
+
+  if (!topPlanet) return
+
+  // Highlight top result
+  topPlanet.material.opacity = 1
+  topPlanet.material.color.set(0xff0000)
+
+  // Focus camera
+  const targetPosition = topPlanet.position.clone().add(new THREE.Vector3(0, 0, 20))
+
+  gsap.to(camera.position, {
+    duration: 1.5,
+    x: targetPosition.x,
+    y: targetPosition.y,
+    z: targetPosition.z,
+  })
+
+  document.getElementById("infoPanel").innerHTML = `
+    <h3>${topPlanetName}</h3>
+    <p>AI Semantic Match</p>
+  `
+}

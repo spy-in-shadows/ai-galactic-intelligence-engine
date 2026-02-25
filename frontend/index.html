@@ -8,6 +8,21 @@
   </head>
   <body>
     <div id="app"></div>
+
+    <div style="
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.7);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    ">
+      <input id="searchInput" placeholder="Search planet..."
+        style="padding:8px; width:200px;" />
+      <button id="searchBtn">Search</button>
+    </div>
+
     <div id="infoPanel" style="
     position: absolute;
     top: 20px;
@@ -19,6 +34,7 @@
     ">
     Select a planet
     </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
